@@ -1,3 +1,6 @@
+#Add that if user re-runs the program it can detect properties it has already applied to and doesnt apply to them again
+#For the intial city search bar could use this video in order to be able to call rightmove's api to speed up the processing time
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import time
@@ -6,9 +9,23 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 
+
 city = "Glasgow" #input('Enter the city you are looking for: ')
 minNumBedrooms = "1" #input('Enter the number of bedrooms you are looking for: ')
 maxPCM = "500" #input('Enter the max amount you are willing to pay  per month: ')
+fName = "John"
+lName = "Appleseed"
+telNum = "07928561045"
+email = "johnappleseed@gmail.com"
+#Need to add a message above where user inputs their address telling them the specific format to put it in e.g. "(House Number) Street Name City Postcode with space inbetween"
+postcode = "EH1 2NG"
+addressLine1 = "362B Castlehill"
+addressLine2 = "Old Town"
+adressCity = "Edinburgh"
+currUserAddress = addressLine1 + " " + addressLine2 + " " + adressCity + " " + postcode
+correctArea = False
+
+
 
 
 options = Options()
@@ -25,8 +42,19 @@ cookiesReject.click()
 searchArea = web.find_element('xpath', '//*[@id="ta_searchInput"]')
 searchArea.send_keys(city)
 rentBtn = web.find_element('xpath', '//*[@id="HomePageContent_heroContainer__OlWkr"]/div[2]/div/div[2]/button[2]')
-time.sleep(2)
 rentBtn.click()
+
+locationListContainer = web.find_element(By.XPATH, '//*[@id="locationIdentifier"]')
+locationList = locationListContainer.find_elements(By.TAG_NAME, 'option')
+for loc in locationList:
+    if loc.text == city:
+        print("Found city")
+        correctArea = True
+        loc.click()
+        break
+
+if correctArea == False:
+    exit(1)
 
 minBedroomsBtn = web.find_element('xpath', '//*[@id="minBedrooms"]')
 minBedroomsBtn = Select(minBedroomsBtn)
@@ -55,6 +83,38 @@ for elt in allListings:
     except: #ElementNotInteractableException
         contactAgentBtn = web.find_element('xpath', '//*[@id="root"]/main/article[2]/div[2]/div[2]/a')
         contactAgentBtn.click()
+    
+    detailsBtn = web.find_element(By.XPATH, '//*[@id="moreDetailsRequested"]')
+    detailsBtn.click()
+
+    viewingBtn = web.find_element('xpath', '//*[@id="toViewProperty"]')
+    viewingBtn.click()
+
+    fNameInput = web.find_element('xpath', '//*[@id="toViewProperty"]')
+    fNameInput.send_keys(fName)
+
+    telInput = web.find_element('xpath', '//*[@id="phone.number"]')
+    telInput.send_keys(telNum)
+
+    emailInput = web.find_element('xpath', '//*[@id="email"]')
+    emailInput.send_keys(email)
+
+    postcodeInput = web.find_element('xpath', '//*[@id="postcode"]')
+    postcodeInput.send_keys(postcode)
+
+    time.sleep(2)
+
+    suggestedResultsContainer = web.find_element('xpath', '//*[@id="app-content"]/div/div/div/div[1]/form/div/div/div[6]/div[2]/ul')
+    suggestedResults = suggestedResultsContainer.find_elements(By.TAG_NAME, 'li')
+
+    for address in suggestedResults:
+        text = address.text.replace(",", "")
+        print(text)
+        if currUserAddress in text:
+            print("Found Address")
+            address.click()
+            break
+
 
     time.sleep(2)
  #   web.get(allListingsPage)
