@@ -1,5 +1,3 @@
-#Add that if user re-runs the program it can detect properties it has already applied to and doesnt apply to them again
-#For the intial city search bar could use this video in order to be able to call rightmove's api to speed up the processing time
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -10,18 +8,18 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 
 
-city = "Glasgow" #input('Enter the city you are looking for: ')
-minNumBedrooms = "1" #input('Enter the number of bedrooms you are looking for: ')
-maxPCM = "500" #input('Enter the max amount you are willing to pay  per month: ')
-fName = "John"
-lName = "Appleseed"
-telNum = "07928561045"
-email = "johnappleseed@gmail.com"
+city = input('Enter the city you are looking for: ')
+minNumBedrooms = input('Enter the number of bedrooms you are looking for: ')
+maxPCM = input('Enter the max amount you are willing to pay  per month: ')
+fName = input('Enter your first name: ')
+lName = input('Enter your last name: ')
+telNum = input('Enter your phone number: ')
+email = input('Enter your email address: ')
 #Need to add a message above where user inputs their address telling them the specific format to put it in e.g. "(House Number) Street Name City Postcode with space inbetween"
-postcode = "EH1 2NG"
-addressLine1 = "362B Castlehill"
-addressLine2 = "Old Town"
-adressCity = "Edinburgh"
+postcode = input('Enter your postcode: ')
+addressLine1 = input('Enter your address line 1: ')
+addressLine2 = input('Enter your address line2: ')
+adressCity = input('Enter your city: ')
 currUserAddress = addressLine1 + " " + addressLine2 + " " + adressCity + " " + postcode
 correctArea = False
 
